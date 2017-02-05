@@ -1,0 +1,11 @@
+const express=require('express');
+const app=express();
+const PORT=process.env.PORT||8888;
+
+app.get('/',function(req,res){
+res.send("Todo API Root added");
+});
+
+app.listen(PORT,function(){
+console.log(` Server listening on port ${PORT}`);
+});
