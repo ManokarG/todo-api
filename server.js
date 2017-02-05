@@ -3,7 +3,7 @@ const app=express();
 const PORT=process.env.PORT||8888;
 
 app.get('/',function(req,res){
-res.send("Todo API Root added");
+res.redirect("www.google.com");
 });
 
 app.listen(PORT,function(){
