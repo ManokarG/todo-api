@@ -3,7 +3,7 @@ const app=express();
 const PORT=process.env.PORT||8888;
 
 app.get('/',function(req,res){
-res.redirect("www.google.com");
+res.redirect("http://www.google.com");
 });
 
 app.listen(PORT,function(){
