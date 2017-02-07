@@ -1,12 +1,12 @@
 const Sequelize=require('sequelize');
 const env=process.env.NODE_DEV||'development';
-if(env=='production'){
-const sequelize=new Sequelize(process.env.DATABASE_URL,{
-	'dialect':'postgres',
-	'storage':__dirname+'/data/db-sqlite-api.sqlite'
+var sequelize;
+if(env==='production'){
+sequelize=new Sequelize(process.env.DATABASE_URL,{
+	'dialect':'postgres'
 });
 }else{
-const sequelize=new Sequelize(undefined,undefined,undefined,{
+sequelize=new Sequelize(undefined,undefined,undefined,{
 	'dialect':'sqlite',
 	'storage':__dirname+'/data/db-sqlite-api.sqlite'
 });
