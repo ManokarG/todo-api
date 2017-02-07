@@ -94,22 +94,22 @@ app.delete('/todo/:id', function(req, res) {
 		}
 	}).then(function(count) {
 
-if(count==0){
-res.status(404).json({
+		if (count == 0) {
+			res.status(404).json({
 				status: 'error',
 				message: 'No todos removed'
 			});
-}else{
-	res.json({
+		} else {
+			res.json({
 				status: 'success',
 				message: `${count} todos removed`
 			});
-}
+		}
 	}).catch(function(e) {
 		res.status(404).json({
-				status: 'error',
-				message: 'No todos removed'
-			});
+			status: 'error',
+			message: 'No todos removed'
+		});
 	});
 
 });
@@ -122,26 +122,31 @@ app.put('/todo/:id', function(req, res) {
 
 	if (body.hasOwnProperty('completed') && _.isBoolean(body.completed)) {
 		data.completed = body.completed;
-	} else if (body.hasOwnProperty('completed')) {
-		return res.status(400).send('No completed args');
 	}
 
 	if (body.hasOwnProperty('description') && _.isString(body.description) && body.description.trim().length > 0) {
 		data.description = body.description;
-	} else if (body.hasOwnProperty('description')) {
-		return res.status(400).send('No description args');
 	}
 
+db.todo.findById(todoId).then(function(todo){
+	return todo.update(data);
+},function(e){
+	res.json({
+		status:"error",
+		message:"No todo found"
+	});
+}).then(function(todo){
+	res.json({
+		status:"success",
+	todo:todo	
+	});
+},function(e){
+res.json({
+		status:"error",
+		message:"No todo found"
+	});
+});
 
-	db.todo.update(data, {
-		where: {
-			id: todoId
-		}
-	}).then(function(array) {
-		res.json();
-	}).catch(function(e) {
-		return res.status(400).send(e.message);
-	})
 });
 
 db.sequelize.sync().then(function() {
