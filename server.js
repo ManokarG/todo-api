@@ -92,22 +92,24 @@ app.delete('/todo/:id', function(req, res) {
 		where: {
 			id: id
 		}
-	}).then(function(todo) {
+	}).then(function(count) {
 
-		if (!todo) {
-			res.status(400).send({
-				"error": "No todo found with the id."
+if(count==0){
+res.status(404).json({
+				status: 'error',
+				message: 'No todos removed'
 			});
-		} else {
-			res.json({
+}else{
+	res.json({
 				status: 'success',
-				todo: todo
+				message: `${count} todos removed`
 			});
-		}
+}
 	}).catch(function(e) {
-		res.status(400).send({
-			"error": "No todo found with the id."
-		});
+		res.status(404).json({
+				status: 'error',
+				message: 'No todos removed'
+			});
 	});
 
 });
