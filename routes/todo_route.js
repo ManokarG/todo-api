@@ -6,6 +6,7 @@ module.exports=function(db,express){
 	router.get("/",function(req, res) {
 
 	var where = {};
+	where.userId=req.user.get('id');
 
 	var query = req.query;
 
@@ -22,7 +23,6 @@ module.exports=function(db,express){
 			$like: '%' + query.q.toLowerCase() + '%'
 		};
 	}
-
 
 	db.todo.findAll({
 		where
@@ -43,7 +43,12 @@ module.exports=function(db,express){
 
 	const todoId = parseInt(req.params.id, 10);
 
-	db.todo.findById(todoId).then(function(todo) {
+	db.todo.findOne({
+		where:{
+			id:todoId,
+			userId:req.user.get('id')
+		}
+	}).then(function(todo) {
 		if (todo) {
 			response.status = "success";
 			response.todo = todo;
@@ -69,7 +74,11 @@ module.exports=function(db,express){
 	const todo = _.pick(req.body, 'completed', 'description');
 
 	db.todo.create(todo).then(function(todo) {
-		res.json(todo.toJSON());
+		req.user.addTodo(todo).then(function(){
+			return todo.reload();
+		}).then(function(todo){
+			res.json(todo.toJSON());
+		});
 	}).catch(function(e) {
 		return res.status(400).send();
 	});
@@ -80,7 +89,8 @@ router.delete('/:id', function(req, res) {
 	const id = parseInt(req.params.id, 10);
 	db.todo.destroy({
 		where: {
-			id: id
+			id: id,
+			userId:req.user.get('id')
 		}
 	}).then(function(count) {
 
@@ -118,7 +128,12 @@ router.put('/:id', function(req, res) {
 		data.description = body.description;
 	}
 
-	db.todo.findById(todoId).then(function(todo) {
+	db.todo.findOne({
+		where:{
+			id:todoId,
+			userId:req.user.get('id')
+		}
+	}).then(function(todo) {
 		return todo.update(data);
 	}, function(e) {
 		res.json({

@@ -7,6 +7,7 @@ const todo_router=require('./routes/todo_route.js')(db,express);
 const user_router=require('./routes/user_route.js')(db,express);
 const app = express();
 const PORT = process.env.PORT || 8888;
+const wantToReload=true;
 
 var todoNextId = 5;
 
@@ -19,7 +20,11 @@ app.get('/', function(req, res) {
 	res.send("Todo API root detected");
 });
 
-db.sequelize.sync().then(function() {
+var reload={};
+if(wantToReload){
+	reload.force=true
+}
+db.sequelize.sync(reload).then(function() {
 	app.listen(PORT, function() {
 		console.log(` Server listening on port ${PORT}`);
 	});
