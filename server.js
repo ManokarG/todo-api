@@ -7,7 +7,7 @@ const todo_router=require('./routes/todo_route.js')(db,express);
 const user_router=require('./routes/user_route.js')(db,express);
 const app = express();
 const PORT = process.env.PORT || 8888;
-const wantToReload=true;
+const wantToReload=false;
 
 var todoNextId = 5;
 
