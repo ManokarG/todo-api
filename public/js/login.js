@@ -72,7 +72,7 @@ xar.onreadystatechange=function(){
 		if(response.status==='error'){
 			a('Login Error');
 		}else{
-			a('Login Success');
+			window.location="/todo.html";
 		}
 	}
 }
