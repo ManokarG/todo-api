@@ -1,0 +1,14 @@
+.container{
+	margin-top: 50px;
+}
+
+.hide{
+	visibility: hidden;
+}
+
+.error{
+	color:red;
+}
+.show{
+	visibility: visible;
+}

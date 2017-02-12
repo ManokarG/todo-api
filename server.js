@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const _ = require('underscore');
 const db = require('./db.js');
+const path=require('path');
 const middleware=require('./middleware.js')(db);
 const todo_router=require('./routes/todo_route.js')(db,express);
 const user_router=require('./routes/user_route.js')(db,express);
@@ -13,12 +14,11 @@ var todoNextId = 5;
 
 app.use(bodyParser.json());
 
+app.use(express.static(path.join(__dirname,'public','html')));
+app.use(express.static(path.join(__dirname,'public','css')));
+app.use(express.static(path.join(__dirname,'public','js')));
 app.use('/users',user_router);
 app.use('/todos',middleware.requireAuthentication,todo_router);
-
-app.get('/', function(req, res) {
-	res.send("Todo API root detected");
-});
 
 var reload={};
 if(wantToReload){
