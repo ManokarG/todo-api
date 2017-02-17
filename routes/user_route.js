@@ -9,12 +9,19 @@ module.exports = function(db, express) {
 
 	router.post('/', function(req, res) {
 
-		var user = _.pick(req.body, 'email', 'password');
+		var user = _.pick(req.body, 'email', 'password','username');
 
 		db.user.create(user).then(function(user) {
-			res.json(user.toPublicJSON());
+			res.json({
+			status:"success",
+			message:"User registered successfully",
+			user:user.toPublicJSON()
+			});
 		}, function(e) {
-			res.status(404).send(e.message);
+			res.json({
+				status:"error",
+				message:e.message
+			});
 		});
 	});
 
@@ -33,7 +40,11 @@ module.exports = function(db, express) {
 				res.send('Error while creating token');
 			}
 		}).then(function(tokenInstance) {
-			res.header('Auth', tokenInstance.get('token')).json(userInstance.toPublicJSON());
+			res.header('Auth', tokenInstance.get('token')).json({
+				status:"success",
+				message:"User logged in successfully",
+				user:userInstance.toPublicJSON()
+			});
 		}).catch(function(e) {
 			console.log(e);
 			res.json({

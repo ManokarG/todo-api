@@ -17,8 +17,13 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname,'public','html')));
 app.use(express.static(path.join(__dirname,'public','css')));
 app.use(express.static(path.join(__dirname,'public','js')));
+app.set('view engine','ejs');
+
 app.use('/users',user_router);
 app.use('/todos',middleware.requireAuthentication,todo_router);
+app.use('/',function(req,res){
+	res.redirect('/login.html');
+})
 
 var reload={};
 if(wantToReload){

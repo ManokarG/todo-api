@@ -5,12 +5,19 @@ var jwt = require('jsonwebtoken');
 
 module.exports = function(sequelize, DataType) {
 	var user = sequelize.define('user', {
+		username: {
+			type: DataType.STRING,
+			allowNull: false
+		},
 		email: {
 			type: DataType.STRING,
 			allowNull: false,
 			unique: true,
 			validate: {
 				isEmail: true
+			},
+			unique:{
+				msg:"Account already exist"
 			}
 		},
 		password: {
@@ -94,7 +101,7 @@ module.exports = function(sequelize, DataType) {
 		instanceMethods: {
 			toPublicJSON: function() {
 				var json = this.toJSON();
-				return _.pick(json, 'id', 'email', 'createdAt', 'updatedAt');
+				return _.pick(json, 'id', 'email','username', 'createdAt', 'updatedAt');
 			},
 			generateToken: function(type) {
 				if (!_.isString(type)) {

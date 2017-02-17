@@ -4,6 +4,7 @@
 	    <title>Login</title>
 	    <link rel="stylesheet" href="bootstrap.min.css">
 	    <link rel="stylesheet" href="stylesheet.css">
+        <script src="/util.js"></script>
 	    <script src="/login.js"></script>
     <head>
     <body>
@@ -15,15 +16,15 @@
                         <div class="form-group">
                         <label for="email">Email</label>
                             <input type="email" id="email" class="form-control" autocomplete="off" placeholder="Enter email">
+                            <label class="error hide" id="tvEmailError">Please enter email</label>
                         </div>
-                        <label class="error hide" id="tvEmailError">Please enter email</label>
                         <div class="form-group">
                         <label for="password">Password</label>
                         <input type="password" class="form-control" id="password" placeholder="Enter password" autocomplete="off">
-                        </div>
                         <label class="error hide" id="tvPasswordError">Please enter password</label>
-                        <button class="btn btn-primary btn-block" class="form-control" id="login">Login</button>
-                        <button class="btn btn-success btn-block" class="form-control" id="register">Register</button>
+                        </div>
+                        <button class="btn btn-primary btn-block" onclick="login()" class="form-control" id="login">Login</button>
+                        <button class="btn btn-success btn-block" onclick="register()" class="form-control" id="register">Register</button>
                     <!-- </form> -->
                 </div>
             </div>

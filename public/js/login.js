@@ -1,42 +1,31 @@
 
-var btnLogin,btnRegister,etEmail,etPassword,tvEmailError,tvPasswordError;
+var etEmail,etPassword,tvEmailError,tvPasswordError;
+
 window.onload=function(e){
-	btnLogin=document.getElementById('login');
-	btnRegister=document.getElementById('register');
+
+	if(getPrefs('login')==1){
+		window.location='/todo.html';
+		return;
+	}
+
 	etEmail=document.getElementById('email');
 	etPassword=document.getElementById('password');
 	tvEmailError=document.getElementById('tvEmailError');
 	tvPasswordError=document.getElementById('tvPasswordError');
-	btnLogin.addEventListener('click',login);
 	etEmail.addEventListener('input',inputEmailChangeListener);
 	etPassword.addEventListener('input',inputPasswordChangeListener);
-	btnRegister.addEventListener('click',register);
 }
 
 function register(){
-	window.location="register.html";
+	redirect('register.html');
 }
 
 function inputEmailChangeListener(){
 	hideDiv(tvEmailError);
 }
 
-function validateEmail(email) 
-{
-    var re = /\S+@\S+\.\S+/;
-    return re.test(email);
-}
-
 function inputPasswordChangeListener(){
 	hideDiv(tvPasswordError);
-}
-
-function hideDiv(element){
-	element.classList.add('hide');
-}
-
-function showDiv(element){
-	element.classList.remove('hide');
 }
 
 
@@ -44,16 +33,19 @@ function login(){
 	hideDiv(tvEmailError);
 	hideDiv(tvPasswordError);
 	if(etEmail.value===''){
+		tvEmailError.textContent='Please enter email';
 		showDiv(tvEmailError);
 		return;
 	}
 
 	if(!validateEmail(etEmail.value)){
+		tvEmailError.textContent='Please enter valid email';
 		showDiv(tvEmailError);
 		return;
 	}
 
 	if(etPassword.value===''){
+		tvPasswordError.textContent='Please enter password';
 		showDiv(tvPasswordError);
 		return;
 	}
@@ -69,16 +61,14 @@ var data=JSON.stringify({
 xar.onreadystatechange=function(){
 	if(xar.readyState==4&&xar.status==200){
 		var response=JSON.parse(xar.responseText);
+		a(response.message);
 		if(response.status==='error'){
-			a('Login Error');
 		}else{
-			window.location="/todo.html";
+			setPrefs('login',1);
+			setPrefs('username',response.user.username);
+			redirect("/todo.html");
 		}
 	}
 }
 xar.send(data);
-}
-
-function a(message){
-	alert(message);
 }
